@@ -132,8 +132,8 @@ RUN go install -v github.com/projectdiscovery/tlsx/cmd/tlsx@latest
 
 # Technology Fingerprinting
 
-## Webanalyze
-RUN go install -v github.com/rverton/webanalyze@latest
+# Webanalyze
+RUN go install -v github.com/rverton/webanalyze/cmd/webanalyze@latest
 
 # Automated Vulnerability Scanning
 
