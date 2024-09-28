@@ -2,10 +2,10 @@
 # Base image
 FROM ubuntu:22.04
 
-# Establecer variables de entorno para evitar prompts durante la instalación
+# Set environment variables to avoid prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Actualizar e instalar dependencias básicas
+# Update and install basic dependencies
 RUN apt-get update && \
     apt-get install -y \
         build-essential \
@@ -49,38 +49,38 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Instalar Go (última versión)
-RUN wget https://golang.org/dl/go1.21.1.linux-amd64.tar.gz &&
-    tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz &&
+# Install Go (latest version)
+RUN wget https://golang.org/dl/go1.21.1.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz && \
     rm go1.21.1.linux-amd64.tar.gz
 
-# Configurar variables de entorno para Go
+# Set Go environment variables
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/go
 ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
-# Crear directorio de trabajo para Go
+# Create Go workspace directory
 RUN mkdir -p $GOPATH/src $GOPATH/bin
 
-# Instalar Rust (para herramientas basadas en Rust)
+# Install Rust (for Rust-based tools)
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-ENV PATH=$PATH:/root/.cargo/bin
+ENV PATH="$PATH:/root/.cargo/bin"
 
-# Instalar Node.js (última versión)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - &&
+# Install Node.js (latest version)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs
 
-# Actualizar pip
+# Upgrade pip
 RUN pip3 install --upgrade pip
 
-# Instalar Java (para herramientas que requieren Java)
+# Install Java (for tools that require Java)
 RUN apt-get update && apt-get install -y default-jdk
 
 # -----------------------------
-# Instalar herramientas basadas en Go
+# Install Go-based tools
 # -----------------------------
 
-# Enumeración de Subdominios
+# Subdomain Enumeration
 
 ## Amass
 RUN go install -v github.com/owasp-amass/amass/v3/...@latest
@@ -100,7 +100,7 @@ RUN go install -v github.com/OJ/gobuster/v3@latest
 ## Chaos
 RUN go install -v github.com/projectdiscovery/chaos-client/cmd/chaos@latest
 
-# Verificación de Subdominios Activos
+# Active Subdomain Verification
 
 ## Httpx
 RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
@@ -111,7 +111,7 @@ RUN go install -v github.com/tomnomnom/httprobe@latest
 ## Dnsx
 RUN go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 
-# Spidering y Crawling
+# Spidering and Crawling
 
 ## Gospider
 RUN go install -v github.com/jaeles-project/gospider@latest
@@ -122,7 +122,7 @@ RUN go install -v github.com/hakluke/hakrawler@latest
 ## Katana
 RUN go install -v github.com/projectdiscovery/katana/cmd/katana@latest
 
-# Escaneo de Puertos y Servicios
+# Port and Service Scanning
 
 ## Naabu
 RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
@@ -130,15 +130,15 @@ RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 ## Tlsx
 RUN go install -v github.com/projectdiscovery/tlsx/cmd/tlsx@latest
 
-# Fingerprinting de Tecnologías
+# Technology Fingerprinting
 
 ## Webanalyze
 RUN go install -v github.com/rverton/webanalyze@latest
 
-# Escaneo de Vulnerabilidades Automatizado
+# Automated Vulnerability Scanning
 
 ## Nuclei
-RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest &&
+RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest && \
     nuclei -update-templates
 
 ## Interactsh client
@@ -156,63 +156,63 @@ RUN go install -v github.com/sensepost/gowitness@latest
 RUN git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
 
 # -----------------------------
-# Instalar herramientas basadas en C
+# Install C-based tools
 # -----------------------------
 
-# Verificación de Subdominios Activos
+# Active Subdomain Verification
 
 ## MassDNS
-RUN git clone https://github.com/blechschmidt/massdns.git /opt/massdns &&
-    cd /opt/massdns &&
-    make &&
+RUN git clone https://github.com/blechschmidt/massdns.git /opt/massdns && \
+    cd /opt/massdns && \
+    make && \
     cp bin/massdns /usr/local/bin/
 
-# Escaneo de Puertos y Servicios
+# Port and Service Scanning
 
 ## Masscan
-RUN git clone https://github.com/robertdavidgraham/masscan /opt/masscan &&
-    cd /opt/masscan &&
-    make &&
+RUN git clone https://github.com/robertdavidgraham/masscan /opt/masscan && \
+    cd /opt/masscan && \
+    make && \
     cp bin/masscan /usr/local/bin/
 
 # -----------------------------
-# Instalar herramientas basadas en Python
+# Install Python-based tools
 # -----------------------------
 
-# Enumeración de Subdominios
+# Subdomain Enumeration
 
 ## Sublist3r
-RUN git clone https://github.com/aboul3la/Sublist3r.git /opt/Sublist3r &&
-    pip3 install -r /opt/Sublist3r/requirements.txt &&
+RUN git clone https://github.com/aboul3la/Sublist3r.git /opt/Sublist3r && \
+    pip3 install -r /opt/Sublist3r/requirements.txt && \
     ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
 
 ## KnockPy
-RUN git clone https://github.com/guelfoweb/knock.git /opt/knock &&
-    cd /opt/knock &&
+RUN git clone https://github.com/guelfoweb/knock.git /opt/knock && \
+    cd /opt/knock && \
     python3 setup.py install
 
 ## Subjack
-RUN git clone https://github.com/haccer/subjack.git /opt/subjack &&
-    cd /opt/subjack &&
-    go build &&
+RUN git clone https://github.com/haccer/subjack.git /opt/subjack && \
+    cd /opt/subjack && \
+    go build && \
     mv subjack /usr/local/bin/
 
 ## Altdns
-RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns &&
-    cd /opt/altdns &&
-    pip3 install -r requirements.txt &&
+RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
+    cd /opt/altdns && \
+    pip3 install -r requirements.txt && \
     python3 setup.py install
 
 ## GitHub Subdomains
-RUN git clone https://github.com/gwen001/github-subdomains.git /opt/github-subdomains &&
-    cd /opt/github-subdomains &&
+RUN git clone https://github.com/gwen001/github-subdomains.git /opt/github-subdomains && \
+    cd /opt/github-subdomains && \
     pip3 install -r requirements.txt
 
 # Subdomain Scanners
 
 ## Subrake
-RUN git clone https://github.com/Hakin9/Subrake.git /opt/subrake &&
-    cd /opt/subrake &&
+RUN git clone https://github.com/Hakin9/Subrake.git /opt/subrake && \
+    cd /opt/subrake && \
     pip3 install -r requirements.txt
 
 # Crawlers
@@ -226,36 +226,36 @@ RUN git clone https://github.com/ghostlulzhacks/waybackMachine.git /opt/waybackM
 # JavaScript Files
 
 ## LinkFinder
-RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder &&
-    pip3 install -r /opt/LinkFinder/requirements.txt &&
+RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
+    pip3 install -r /opt/LinkFinder/requirements.txt && \
     ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
 
 ## JSSearch
-RUN git clone https://github.com/incogbyte/jsearch.git /opt/jsearch &&
-    cd /opt/jsearch &&
+RUN git clone https://github.com/incogbyte/jsearch.git /opt/jsearch && \
+    cd /opt/jsearch && \
     pip3 install -r requirements.txt
 
 # CMS Scanners
 
 ## CMSMap
-RUN git clone https://github.com/Dionach/CMSmap.git /opt/CMSmap &&
-    cd /opt/CMSmap &&
-    pip3 install -r requirements.txt &&
+RUN git clone https://github.com/Dionach/CMSmap.git /opt/CMSmap && \
+    cd /opt/CMSmap && \
+    pip3 install -r requirements.txt && \
     ln -s /opt/CMSmap/cmsmap.py /usr/local/bin/cmsmap
 
 # Scanners
 
 ## Tplmap
-RUN git clone https://github.com/epinna/tplmap.git /opt/tplmap &&
-    cd /opt/tplmap &&
-    pip3 install -r requirements.txt &&
+RUN git clone https://github.com/epinna/tplmap.git /opt/tplmap && \
+    cd /opt/tplmap && \
+    pip3 install -r requirements.txt && \
     ln -s /opt/tplmap/tplmap.py /usr/local/bin/tplmap
 
 ## SQLMap
-RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap &&
+RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
     ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
 
-# Escaneo de Vulnerabilidades Automatizado
+# Automated Vulnerability Scanning
 
 ## SSLyze
 RUN pip3 install sslyze
@@ -263,35 +263,35 @@ RUN pip3 install sslyze
 # Screenshots
 
 ## EyeWitness
-RUN git clone https://github.com/FortyNorthSecurity/EyeWitness.git /opt/EyeWitness &&
-    cd /opt/EyeWitness/Python/setup &&
+RUN git clone https://github.com/FortyNorthSecurity/EyeWitness.git /opt/EyeWitness && \
+    cd /opt/EyeWitness/Python/setup && \
     bash setup.sh
 
 # JSON Manipulation
 
-## JQ (ya instalado)
+## JQ (already installed)
 
 # -----------------------------
-# Instalar herramientas basadas en Perl
+# Install Perl-based tools
 # -----------------------------
 
-# Escaneo de Vulnerabilidades Automatizado
+# Automated Vulnerability Scanning
 
 ## Nikto
-RUN git clone https://github.com/sullo/nikto.git /opt/nikto &&
+RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
     ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
 
 # -----------------------------
-# Instalar herramientas basadas en Ruby
+# Install Ruby-based tools
 # -----------------------------
 
-# Fingerprinting de Tecnologías
+# Technology Fingerprinting
 
 ## WhatWeb
-RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb &&
-    cd /opt/WhatWeb &&
-    gem install bundler &&
-    bundle install &&
+RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb && \
+    cd /opt/WhatWeb && \
+    gem install bundler && \
+    bundle install && \
     ln -s /opt/WhatWeb/whatweb /usr/local/bin/whatweb
 
 # CMS Scanners
@@ -300,30 +300,30 @@ RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb &&
 RUN gem install wpscan
 
 # -----------------------------
-# Instalar otras herramientas
+# Install other tools
 # -----------------------------
 
-# Enumeración de Subdominios
+# Subdomain Enumeration
 
 ## Findomain
-RUN wget https://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip &&
-    unzip findomain-linux.zip &&
-    chmod +x findomain &&
-    mv findomain /usr/local/bin/ &&
+RUN wget https://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip && \
+    unzip findomain-linux.zip && \
+    chmod +x findomain && \
+    mv findomain /usr/local/bin/ && \
     rm findomain-linux.zip
 
-# Escaneo de Puertos y Servicios
+# Port and Service Scanning
 
 ## Nmap
-RUN apt-get update &&
+RUN apt-get update && \
     apt-get install -y nmap
 
 # Git Tools
 
 ## shhgit
-RUN git clone https://github.com/eth0izzle/shhgit.git /opt/shhgit &&
-    cd /opt/shhgit &&
-    go build &&
+RUN git clone https://github.com/eth0izzle/shhgit.git /opt/shhgit && \
+    cd /opt/shhgit && \
+    go build && \
     mv shhgit /usr/local/bin/
 
 # Wordlists
@@ -340,39 +340,39 @@ RUN git clone https://github.com/bonino97/BBH-Lists.git /opt/BBH-Lists
 ## DirBuster Wordlists
 RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuster
 
-# Install CloudEnum (para Cloud Discovery)
-RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum &&
+# Install CloudEnum (for Cloud Discovery)
+RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
     pip3 install -r /opt/cloud_enum/requirements.txt
 
-# Install S3Scanner (para AWS Bucket Enumeration)
-RUN git clone https://github.com/sa7mon/S3Scanner.git /opt/S3Scanner &&
+# Install S3Scanner (for AWS Bucket Enumeration)
+RUN git clone https://github.com/sa7mon/S3Scanner.git /opt/S3Scanner && \
     pip3 install -r /opt/S3Scanner/requirements.txt
 
-# Install GCPBucketBrute (para GCP Bucket Enumeration)
+# Install GCPBucketBrute (for GCP Bucket Enumeration)
 RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBucketBrute
 
 # Install Wfuzz
 RUN pip3 install wfuzz
 
-# Instalar Flask (para la API)
+# Install Flask (for the API)
 RUN pip3 install flask
 
-# Limpiar
-RUN apt-get clean &&
+# Clean up
+RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Establecer directorio de trabajo
+# Set working directory
 WORKDIR /root/
 
-# Exponer el puerto para la API
+# Expose the API port
 EXPOSE 8000
 
-# Copiar y establecer permisos para el script de entrada
+# Copy and set permissions for the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Copiar archivos de la API
+# Copy API files
 COPY api /opt/api
 
-# Comando por defecto
+# Default command
 CMD ["/entrypoint.sh"]
