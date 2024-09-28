@@ -1,7 +1,3 @@
-Certainly! Here's the updated `README.md` in English, explaining how to use the `build.sh` script located within the `install` directory of your repository. The instructions are organized, and the manual installation steps are also included below the initial explanation.
-
----
-
 # README.md
 
 ## LemonBooster: Automated Reconnaissance and Vulnerability Scanning Platform
@@ -9,8 +5,6 @@ Certainly! Here's the updated `README.md` in English, explaining how to use the 
 ### Description
 
 LemonBooster is an automated platform that integrates multiple security tools for enumeration, discovery, and vulnerability scanning. This README provides detailed instructions to install and run LemonBooster on a Digital Ocean Droplet.
-
----
 
 ## Table of Contents
 

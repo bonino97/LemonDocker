@@ -5,8 +5,8 @@ FROM ubuntu:22.04
 # Establecer variables de entorno para evitar prompts durante la instalación
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Actualizar y instalar dependencias básicas
-RUN apt-get update &&
+# Actualizar e instalar dependencias básicas
+RUN apt-get update && \
     apt-get install -y \
         build-essential \
         git \
@@ -45,7 +45,8 @@ RUN apt-get update &&
         make \
         cmake \
         perl \
-        default-jdk &&
+        default-jdk && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Instalar Go (última versión)

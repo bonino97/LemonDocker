@@ -16,6 +16,8 @@ systemctl enable docker
 # Navigate to the repository root
 cd ..
 
+chmod +x entrypoint.sh
+
 # Build the Docker image
 docker build -t lemonbooster -f Dockerfile .
 
