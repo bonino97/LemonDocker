@@ -146,9 +146,6 @@ RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@l
 
 # Screenshots
 
-## Aquatone
-RUN go install -v github.com/michenriksen/aquatone@latest
-
 ## GoWitness
 RUN go install -v github.com/sensepost/gowitness@latest
 
