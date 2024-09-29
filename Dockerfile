@@ -82,262 +82,262 @@ RUN pip3 install --upgrade pip
 # Install Java (for tools that require Java)
 RUN apt-get update && apt-get install -y default-jdk
 
-# # -----------------------------
-# # Subdomain Enumeration
-# # -----------------------------
+# -----------------------------
+# Subdomain Enumeration
+# -----------------------------
 
-# # Amass
-# RUN go install -v github.com/owasp-amass/amass/v3/...@latest
+# Amass
+RUN go install -v github.com/owasp-amass/amass/v3/...@latest
 
 # Subfinder
 RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
-# # ASNmap
-# RUN go install -v github.com/projectdiscovery/asnmap/cmd/asnmap@latest
+# ASNmap
+RUN go install -v github.com/projectdiscovery/asnmap/cmd/asnmap@latest
 
-# # Assetfinder
-# RUN go install -v github.com/tomnomnom/assetfinder@latest
-
-# # Chaos
-# RUN go install -v github.com/projectdiscovery/chaos-client/cmd/chaos@latest
-
-# # Cero
-# RUN go install -v github.com/glebarez/cero@latest
-
-# # Sublist3r
-# RUN git clone https://github.com/aboul3la/Sublist3r.git /opt/Sublist3r && \
-#     pip3 install -r /opt/Sublist3r/requirements.txt && \
-#     ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
-
-# # KnockPy
-# RUN git clone https://github.com/guelfoweb/knock.git /opt/knock && \
-#     cd /opt/knock && \
-#     python3 setup.py install
-
-# # Altdns
-# RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
-#     cd /opt/altdns && \
-#     pip3 install -r requirements.txt && \
-#     python3 setup.py install
+# Assetfinder
+RUN go install -v github.com/tomnomnom/assetfinder@latest
+
+# Chaos
+RUN go install -v github.com/projectdiscovery/chaos-client/cmd/chaos@latest
+
+# Cero
+RUN go install -v github.com/glebarez/cero@latest
+
+# Sublist3r
+RUN git clone https://github.com/aboul3la/Sublist3r.git /opt/Sublist3r && \
+    pip3 install -r /opt/Sublist3r/requirements.txt && \
+    ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
+
+# KnockPy
+RUN git clone https://github.com/guelfoweb/knock.git /opt/knock && \
+    cd /opt/knock && \
+    python3 setup.py install
+
+# Altdns
+RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
+    cd /opt/altdns && \
+    pip3 install -r requirements.txt && \
+    python3 setup.py install
 
-# # Findomain
-# RUN wget https://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip && \
-#     unzip findomain-linux.zip && \
-#     chmod +x findomain && \
-#     mv findomain /usr/local/bin/ && \
-#     rm findomain-linux.zip
-
-# # GitHub Subdomains
-# RUN go install -v github.com/gwen001/github-subdomains@latest
-
-# # -----------------------------
-# # Active Subdomain Verification
-# # -----------------------------
-
-# # Httpx
-# RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+# Findomain
+RUN wget https://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip && \
+    unzip findomain-linux.zip && \
+    chmod +x findomain && \
+    mv findomain /usr/local/bin/ && \
+    rm findomain-linux.zip
+
+# GitHub Subdomains
+RUN go install -v github.com/gwen001/github-subdomains@latest
+
+# -----------------------------
+# Active Subdomain Verification
+# -----------------------------
+
+# Httpx
+RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 
-# # Httprobe
-# RUN go install -v github.com/tomnomnom/httprobe@latest
+# Httprobe
+RUN go install -v github.com/tomnomnom/httprobe@latest
 
-# # Dnsx
-# RUN go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+# Dnsx
+RUN go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 
-# # MassDNS
-# RUN git clone https://github.com/blechschmidt/massdns.git /opt/massdns && \
-#     cd /opt/massdns && \
-#     make && \
-#     cp bin/massdns /usr/local/bin/
+# MassDNS
+RUN git clone https://github.com/blechschmidt/massdns.git /opt/massdns && \
+    cd /opt/massdns && \
+    make && \
+    cp bin/massdns /usr/local/bin/
 
-# # Subrake
-# RUN git clone https://github.com/hash3liZer/Subrake.git /opt/subrake && \
-#     cd /opt/subrake && \
-#     pip3 install -r requirements.txt
+# Subrake
+RUN git clone https://github.com/hash3liZer/Subrake.git /opt/subrake && \
+    cd /opt/subrake && \
+    pip3 install -r requirements.txt
 
-# # -----------------------------
-# # Spidering and Crawling
-# # -----------------------------
+# -----------------------------
+# Spidering and Crawling
+# -----------------------------
 
-# # Gospider
-# RUN go install -v github.com/jaeles-project/gospider@latest
+# Gospider
+RUN go install -v github.com/jaeles-project/gospider@latest
 
-# # Hakrawler
-# RUN go install -v github.com/hakluke/hakrawler@latest
+# Hakrawler
+RUN go install -v github.com/hakluke/hakrawler@latest
 
-# # Katana
-# RUN go install -v github.com/projectdiscovery/katana/cmd/katana@latest
+# Katana
+RUN go install -v github.com/projectdiscovery/katana/cmd/katana@latest
 
-# # -----------------------------
-# # Port and Service Scanning
-# # -----------------------------
+# -----------------------------
+# Port and Service Scanning
+# -----------------------------
 
-# # Naabu
-# RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+# Naabu
+RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 
-# # Tlsx
-# RUN go install -v github.com/projectdiscovery/tlsx/cmd/tlsx@latest
+# Tlsx
+RUN go install -v github.com/projectdiscovery/tlsx/cmd/tlsx@latest
 
-# # Masscan
-# RUN git clone https://github.com/robertdavidgraham/masscan /opt/masscan && \
-#     cd /opt/masscan && \
-#     make && \
-#     cp bin/masscan /usr/local/bin/
+# Masscan
+RUN git clone https://github.com/robertdavidgraham/masscan /opt/masscan && \
+    cd /opt/masscan && \
+    make && \
+    cp bin/masscan /usr/local/bin/
 
-# # Nmap
-# RUN apt-get update && \
-#     apt-get install -y nmap
-
-# # -----------------------------
-# # Technology Fingerprinting
-# # -----------------------------
-
-# # Webanalyze
-# RUN go install -v github.com/rverton/webanalyze/cmd/webanalyze@latest
-
-# # WhatWeb
-# RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb && \
-#     cd /opt/WhatWeb && \
-#     gem install bundler && \
-#     bundle install && \
-#     ln -s /opt/WhatWeb/whatweb /usr/local/bin/whatweb
+# Nmap
+RUN apt-get update && \
+    apt-get install -y nmap
+
+# -----------------------------
+# Technology Fingerprinting
+# -----------------------------
+
+# Webanalyze
+RUN go install -v github.com/rverton/webanalyze/cmd/webanalyze@latest
+
+# WhatWeb
+RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb && \
+    cd /opt/WhatWeb && \
+    gem install bundler && \
+    bundle install && \
+    ln -s /opt/WhatWeb/whatweb /usr/local/bin/whatweb
 
-# # -----------------------------
-# # Automated Vulnerability Scanning
-# # -----------------------------
+# -----------------------------
+# Automated Vulnerability Scanning
+# -----------------------------
 
-# # Nuclei
-# RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest && \
-#     nuclei -update-templates
+# Nuclei
+RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest && \
+    nuclei -update-templates
 
-# # Interactsh client
-# RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+# Interactsh client
+RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
 
-# # SQLMap
-# RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
-#     ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
+# SQLMap
+RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
+    ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
 
-# # SSLyze
-# RUN pip3 install sslyze
+# SSLyze
+RUN pip3 install sslyze
 
-# # Nikto
-# RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
-#     ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
+# Nikto
+RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
+    ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
 
-# # -----------------------------
-# # Screenshots
-# # -----------------------------
+# -----------------------------
+# Screenshots
+# -----------------------------
 
-# # GoWitness
-# RUN go install -v github.com/sensepost/gowitness@latest
+# GoWitness
+RUN go install -v github.com/sensepost/gowitness@latest
 
-# # EyeWitness
-# RUN git clone https://github.com/FortyNorthSecurity/EyeWitness.git /opt/EyeWitness && \
-#     cd /opt/EyeWitness/Python/setup && \
-#     bash setup.sh
+# EyeWitness
+RUN git clone https://github.com/FortyNorthSecurity/EyeWitness.git /opt/EyeWitness && \
+    cd /opt/EyeWitness/Python/setup && \
+    bash setup.sh
 
-# # -----------------------------
-# # Directory and File Brute Forcing
-# # -----------------------------
+# -----------------------------
+# Directory and File Brute Forcing
+# -----------------------------
 
-# # GoBuster
-# RUN go install -v github.com/OJ/gobuster/v3@latest
+# GoBuster
+RUN go install -v github.com/OJ/gobuster/v3@latest
 
-# # Dirsearch
-# RUN git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
+# Dirsearch
+RUN git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
 
-# # Wfuzz
-# RUN pip3 install wfuzz
+# Wfuzz
+RUN pip3 install wfuzz
 
-# # Ffuf
-# RUN go install -v github.com/ffuf/ffuf/v2@latest
+# Ffuf
+RUN go install -v github.com/ffuf/ffuf/v2@latest
 
-# # -----------------------------
-# # CMS Scanners
-# # -----------------------------
+# -----------------------------
+# CMS Scanners
+# -----------------------------
 
-# # WPScan
-# RUN gem install wpscan
+# WPScan
+RUN gem install wpscan
 
-# # -----------------------------
-# # JavaScript Analysis
-# # -----------------------------
+# -----------------------------
+# JavaScript Analysis
+# -----------------------------
 
-# # LinkFinder
-# RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
-#     pip3 install -r /opt/LinkFinder/requirements.txt && \
-#     ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
+# LinkFinder
+RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
+    pip3 install -r /opt/LinkFinder/requirements.txt && \
+    ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
 
-# # -----------------------------
-# # OSINT Tools
-# # -----------------------------
+# -----------------------------
+# OSINT Tools
+# -----------------------------
 
-# # TheHarvester
-# RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && \
-#     cd /opt/theHarvester && \
-#     pip3 install -r requirements/base.txt && \
-#     ln -s /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
+# TheHarvester
+RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && \
+    cd /opt/theHarvester && \
+    pip3 install -r requirements/base.txt && \
+    ln -s /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
 
-# # -----------------------------
-# # Git Tools
-# # -----------------------------
+# -----------------------------
+# Git Tools
+# -----------------------------
 
-# # shhgit
-# RUN git clone https://github.com/eth0izzle/shhgit.git /opt/shhgit && \
-#     cd /opt/shhgit && \
-#     go build && \
-#     mv shhgit /usr/local/bin/
+# shhgit
+RUN git clone https://github.com/eth0izzle/shhgit.git /opt/shhgit && \
+    cd /opt/shhgit && \
+    go build && \
+    mv shhgit /usr/local/bin/
 
-# # -----------------------------
-# # Cloud Discovery Tools
-# # -----------------------------
+# -----------------------------
+# Cloud Discovery Tools
+# -----------------------------
 
-# # CloudEnum
-# RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
-#     pip3 install -r /opt/cloud_enum/requirements.txt
+# CloudEnum
+RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
+    pip3 install -r /opt/cloud_enum/requirements.txt
 
-# # CloudList (uncommented)
-# # RUN go install -v github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
+# CloudList (uncommented)
+# RUN go install -v github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
 
-# # S3Scanner (for AWS Bucket Enumeration)
-# RUN go install -v github.com/sa7mon/s3scanner@latest
+# S3Scanner (for AWS Bucket Enumeration)
+RUN go install -v github.com/sa7mon/s3scanner@latest
 
-# # GCPBucketBrute (for GCP Bucket Enumeration)
-# RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBucketBrute
+# GCPBucketBrute (for GCP Bucket Enumeration)
+RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBucketBrute
 
-# # -----------------------------
-# # Miscellaneous Tools
-# # -----------------------------
+# -----------------------------
+# Miscellaneous Tools
+# -----------------------------
 
-# # AlterX (for Alteration Detection)
-# RUN go install -v github.com/projectdiscovery/alterx/cmd/alterx@latest
+# AlterX (for Alteration Detection)
+RUN go install -v github.com/projectdiscovery/alterx/cmd/alterx@latest
 
-# # Subzy (for Subdomain Takeover Detection)
-# RUN go install -v github.com/PentestPad/subzy@latest
+# Subzy (for Subdomain Takeover Detection)
+RUN go install -v github.com/PentestPad/subzy@latest
 
-# # CveMap (for CVE Detection)
-# RUN go install -v github.com/projectdiscovery/cvemap/cmd/cvemap@latest
+# CveMap (for CVE Detection)
+RUN go install -v github.com/projectdiscovery/cvemap/cmd/cvemap@latest
 
-# # uncover (to quickly discover exposed hosts on the internet)
-# RUN go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
+# uncover (to quickly discover exposed hosts on the internet)
+RUN go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
 
-# # PDTM (to install all project discovery tools)
-# RUN go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
+# PDTM (to install all project discovery tools)
+RUN go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
 
-# # -----------------------------
-# # Wordlists
-# # -----------------------------
+# -----------------------------
+# Wordlists
+# -----------------------------
 
-# # SecLists
-# RUN git clone https://github.com/danielmiessler/SecLists.git /opt/SecLists
+# SecLists
+RUN git clone https://github.com/danielmiessler/SecLists.git /opt/SecLists
 
-# # Commonspeak2-Wordlists
-# RUN git clone https://github.com/assetnote/commonspeak2-wordlists.git /opt/commonspeak2-wordlists
+# Commonspeak2-Wordlists
+RUN git clone https://github.com/assetnote/commonspeak2-wordlists.git /opt/commonspeak2-wordlists
 
-# # BBH-Lists
-# RUN git clone https://github.com/bonino97/BBH-Lists.git /opt/BBH-Lists
+# BBH-Lists
+RUN git clone https://github.com/bonino97/BBH-Lists.git /opt/BBH-Lists
 
-# # DirBuster Wordlists
-# RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuster
+# DirBuster Wordlists
+RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuster
 
 # -----------------------------
 # Additional Setup
