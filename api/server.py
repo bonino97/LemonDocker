@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify  # type: ignore
 from flask_restx import Api, Resource, fields  # type: ignore
-from celery import Celery, chain, AsyncResult  # type: ignore
+from celery import Celery, chain  # type: ignore
 from sqlalchemy import create_engine, Column, String, Text  # type: ignore
 from sqlalchemy.ext.declarative import declarative_base  # type: ignore
 from sqlalchemy.orm import sessionmaker  # type: ignore
@@ -227,7 +227,7 @@ class JobStatus(Resource):
             api.abort(404, "Job not found")
 
         # Obtener el estado de la tarea de Celery usando AsyncResult
-        task_result = AsyncResult(job_id, app=celery)
+        task_result = celery.AsyncResult(job_id, app=celery)
 
         # Detallar tanto el estado en Celery como el estado del job en la base de datos
         return {
@@ -294,7 +294,7 @@ class JobResult(Resource):
             api.abort(400, "Job not completed yet")
 
         # Agregar información adicional en la respuesta del resultado
-        task_result = AsyncResult(job_id, app=celery)
+        task_result = celery.AsyncResult(job_id, app=celery)
         return {
             'job_id': job_id,
             'job_status': job.status,
