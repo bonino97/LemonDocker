@@ -280,9 +280,7 @@ LemonBooster includes a wide range of security tools categorized by their primar
 ### Miscellaneous Tools
 - [AlterX](https://github.com/projectdiscovery/alterx)
 - [Subzy](https://github.com/PentestPad/subzy)
-- [CveMap](https://github.com/projectdis
-
-covery/cvemap)
+- [CveMap](https://github.com/projectdiscovery/cvemap)
 - [uncover](https://github.com/projectdiscovery/uncover)
 - [PDTM](https://github.com/projectdiscovery/pdtm)
 
