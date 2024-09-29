@@ -315,7 +315,7 @@ RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
     pip3 install -r /opt/cloud_enum/requirements.txt
 
 # Install CloudList (for Cloud Discovery)
-RUN go install -v github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
+# RUN go install -v github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
 
 # Install S3Scanner (for AWS Bucket Enumeration)
 RUN go install -v github.com/sa7mon/s3scanner@latest
