@@ -314,8 +314,7 @@ RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
     pip3 install -r /opt/cloud_enum/requirements.txt
 
 # Install S3Scanner (for AWS Bucket Enumeration)
-RUN git clone https://github.com/sa7mon/S3Scanner.git /opt/S3Scanner && \
-    pip3 install -r /opt/S3Scanner/requirements.txt
+RUN go install -v github.com/sa7mon/s3scanner@latest
 
 # Install GCPBucketBrute (for GCP Bucket Enumeration)
 RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBucketBrute
