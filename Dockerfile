@@ -335,6 +335,9 @@ RUN go install -v github.com/projectdiscovery/cvemap/cmd/cvemap@latest
 # Install uncover (to quickly discover exposed hosts on the internet)
 RUN go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
 
+# Install PDTM (to install all project discovery tools)
+RUN go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
+
 # Install Wfuzz
 RUN pip3 install wfuzz
 
