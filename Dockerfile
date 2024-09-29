@@ -79,162 +79,194 @@ RUN pip3 install --upgrade pip
 RUN apt-get update && apt-get install -y default-jdk
 
 # -----------------------------
-# Install Go-based tools
+# Subdomain Enumeration
 # -----------------------------
 
-# Subdomain Enumeration
-
-## Amass
+# Amass
 RUN go install -v github.com/owasp-amass/amass/v3/...@latest
 
-## Subfinder
+# Subfinder
 RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
-## ASNmap
+# ASNmap
 RUN go install -v github.com/projectdiscovery/asnmap/cmd/asnmap@latest
 
-## Assetfinder
+# Assetfinder
 RUN go install -v github.com/tomnomnom/assetfinder@latest
 
-## GoBuster
-RUN go install -v github.com/OJ/gobuster/v3@latest
-
-## Chaos
+# Chaos
 RUN go install -v github.com/projectdiscovery/chaos-client/cmd/chaos@latest
 
-# Active Subdomain Verification
+# Cero
+RUN go install -v github.com/glebarez/cero@latest
 
-## Httpx
-RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-
-## Httprobe
-RUN go install -v github.com/tomnomnom/httprobe@latest
-
-## Dnsx
-RUN go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
-
-# Spidering and Crawling
-
-## Gospider
-RUN go install -v github.com/jaeles-project/gospider@latest
-
-## Hakrawler
-RUN go install -v github.com/hakluke/hakrawler@latest
-
-## Katana
-RUN go install -v github.com/projectdiscovery/katana/cmd/katana@latest
-
-# Port and Service Scanning
-
-## Naabu
-RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
-
-## Tlsx
-RUN go install -v github.com/projectdiscovery/tlsx/cmd/tlsx@latest
-
-# Technology Fingerprinting
-
-# Webanalyze
-RUN go install -v github.com/rverton/webanalyze/cmd/webanalyze@latest
-
-# Automated Vulnerability Scanning
-
-## Nuclei
-RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest && \
-    nuclei -update-templates
-
-## Interactsh client
-RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
-
-# Screenshots
-
-## GoWitness
-RUN go install -v github.com/sensepost/gowitness@latest
-
-## GitHub Subdomains
-RUN go install -v github.com/gwen001/github-subdomains@latest
-
-# Dirsearch (Python-based but added here for categorization)
-RUN git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
-
-# -----------------------------
-# Install C-based tools
-# -----------------------------
-
-# Active Subdomain Verification
-
-## MassDNS
-RUN git clone https://github.com/blechschmidt/massdns.git /opt/massdns && \
-    cd /opt/massdns && \
-    make && \
-    cp bin/massdns /usr/local/bin/
-
-# Port and Service Scanning
-
-## Masscan
-RUN git clone https://github.com/robertdavidgraham/masscan /opt/masscan && \
-    cd /opt/masscan && \
-    make && \
-    cp bin/masscan /usr/local/bin/
-
-# -----------------------------
-# Install Python-based tools
-# -----------------------------
-
-# Subdomain Enumeration
-
-## Sublist3r
+# Sublist3r
 RUN git clone https://github.com/aboul3la/Sublist3r.git /opt/Sublist3r && \
     pip3 install -r /opt/Sublist3r/requirements.txt && \
     ln -s /opt/Sublist3r/sublist3r.py /usr/local/bin/sublist3r
 
-## KnockPy
+# KnockPy
 RUN git clone https://github.com/guelfoweb/knock.git /opt/knock && \
     cd /opt/knock && \
     python3 setup.py install
 
-## Altdns
+# Altdns
 RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
     cd /opt/altdns && \
     pip3 install -r requirements.txt && \
     python3 setup.py install
 
-# Subdomain Scanners
-## Subrake
+# Findomain
+RUN wget https://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip && \
+    unzip findomain-linux.zip && \
+    chmod +x findomain && \
+    mv findomain /usr/local/bin/ && \
+    rm findomain-linux.zip
+
+# GitHub Subdomains
+RUN go install -v github.com/gwen001/github-subdomains@latest
+
+# -----------------------------
+# Active Subdomain Verification
+# -----------------------------
+
+# Httpx
+RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+
+# Httprobe
+RUN go install -v github.com/tomnomnom/httprobe@latest
+
+# Dnsx
+RUN go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+
+# MassDNS
+RUN git clone https://github.com/blechschmidt/massdns.git /opt/massdns && \
+    cd /opt/massdns && \
+    make && \
+    cp bin/massdns /usr/local/bin/
+
+# Subrake
 RUN git clone https://github.com/hash3liZer/Subrake.git /opt/subrake && \
     cd /opt/subrake && \
     pip3 install -r requirements.txt
 
-# JavaScript Files
+# -----------------------------
+# Spidering and Crawling
+# -----------------------------
 
-## LinkFinder
-RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
-    pip3 install -r /opt/LinkFinder/requirements.txt && \
-    ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
+# Gospider
+RUN go install -v github.com/jaeles-project/gospider@latest
 
-# Scanners
+# Hakrawler
+RUN go install -v github.com/hakluke/hakrawler@latest
 
-## SQLMap
+# Katana
+RUN go install -v github.com/projectdiscovery/katana/cmd/katana@latest
+
+# -----------------------------
+# Port and Service Scanning
+# -----------------------------
+
+# Naabu
+RUN go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+
+# Tlsx
+RUN go install -v github.com/projectdiscovery/tlsx/cmd/tlsx@latest
+
+# Masscan
+RUN git clone https://github.com/robertdavidgraham/masscan /opt/masscan && \
+    cd /opt/masscan && \
+    make && \
+    cp bin/masscan /usr/local/bin/
+
+# Nmap
+RUN apt-get update && \
+    apt-get install -y nmap
+
+# -----------------------------
+# Technology Fingerprinting
+# -----------------------------
+
+# Webanalyze
+RUN go install -v github.com/rverton/webanalyze/cmd/webanalyze@latest
+
+# WhatWeb
+RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb && \
+    cd /opt/WhatWeb && \
+    gem install bundler && \
+    bundle install && \
+    ln -s /opt/WhatWeb/whatweb /usr/local/bin/whatweb
+
+# -----------------------------
+# Automated Vulnerability Scanning
+# -----------------------------
+
+# Nuclei
+RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest && \
+    nuclei -update-templates
+
+# Interactsh client
+RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+
+# SQLMap
 RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
     ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
 
-# Automated Vulnerability Scanning
-
-## SSLyze
+# SSLyze
 RUN pip3 install sslyze
 
-# Screenshots
+# Nikto
+RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
+    ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
 
-## EyeWitness
+# -----------------------------
+# Screenshots
+# -----------------------------
+
+# GoWitness
+RUN go install -v github.com/sensepost/gowitness@latest
+
+# EyeWitness
 RUN git clone https://github.com/FortyNorthSecurity/EyeWitness.git /opt/EyeWitness && \
     cd /opt/EyeWitness/Python/setup && \
     bash setup.sh
 
-# JSON Manipulation
+# -----------------------------
+# Directory and File Brute Forcing
+# -----------------------------
 
-## JQ (already installed)
+# GoBuster
+RUN go install -v github.com/OJ/gobuster/v3@latest
 
-# OSINT
+# Dirsearch
+RUN git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
+
+# Wfuzz
+RUN pip3 install wfuzz
+
+# Ffuf
+RUN go install -v github.com/ffuf/ffuf/v2@latest
+
+# -----------------------------
+# CMS Scanners
+# -----------------------------
+
+# WPScan
+RUN gem install wpscan
+
+# -----------------------------
+# JavaScript Analysis
+# -----------------------------
+
+# LinkFinder
+RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
+    pip3 install -r /opt/LinkFinder/requirements.txt && \
+    ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
+
+# -----------------------------
+# OSINT Tools
+# -----------------------------
+
 # TheHarvester
 RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && \
     cd /opt/theHarvester && \
@@ -242,109 +274,72 @@ RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && 
     ln -s /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
 
 # -----------------------------
-# Install Perl-based tools
-# -----------------------------
-
-# Automated Vulnerability Scanning
-
-## Nikto
-RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
-    ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto
-
-# -----------------------------
-# Install Ruby-based tools
-# -----------------------------
-
-# Technology Fingerprinting
-
-## WhatWeb
-RUN git clone https://github.com/urbanadventurer/WhatWeb /opt/WhatWeb && \
-    cd /opt/WhatWeb && \
-    gem install bundler && \
-    bundle install && \
-    ln -s /opt/WhatWeb/whatweb /usr/local/bin/whatweb
-
-# CMS Scanners
-
-## WPScan
-RUN gem install wpscan
-
-# -----------------------------
-# Install other tools
-# -----------------------------
-
-# Subdomain Enumeration
-
-## Findomain
-RUN wget https://github.com/Findomain/Findomain/releases/latest/download/findomain-linux.zip && \
-    unzip findomain-linux.zip && \
-    chmod +x findomain && \
-    mv findomain /usr/local/bin/ && \
-    rm findomain-linux.zip
-
-# Port and Service Scanning
-
-## Nmap
-RUN apt-get update && \
-    apt-get install -y nmap
-
 # Git Tools
+# -----------------------------
 
-## shhgit
+# shhgit
 RUN git clone https://github.com/eth0izzle/shhgit.git /opt/shhgit && \
     cd /opt/shhgit && \
     go build && \
     mv shhgit /usr/local/bin/
 
-# Wordlists
+# -----------------------------
+# Cloud Discovery Tools
+# -----------------------------
 
-## SecLists
-RUN git clone https://github.com/danielmiessler/SecLists.git /opt/SecLists
-
-## Commonspeak2-Wordlists
-RUN git clone https://github.com/assetnote/commonspeak2-wordlists.git /opt/commonspeak2-wordlists
-
-## BBH-Lists
-RUN git clone https://github.com/bonino97/BBH-Lists.git /opt/BBH-Lists
-
-## DirBuster Wordlists
-RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuster
-
-# Install CloudEnum (for Cloud Discovery)
+# CloudEnum
 RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
     pip3 install -r /opt/cloud_enum/requirements.txt
 
-# Install CloudList (for Cloud Discovery)
+# CloudList (uncommented)
 # RUN go install -v github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
 
-# Install S3Scanner (for AWS Bucket Enumeration)
+# S3Scanner (for AWS Bucket Enumeration)
 RUN go install -v github.com/sa7mon/s3scanner@latest
 
-# Install GCPBucketBrute (for GCP Bucket Enumeration)
+# GCPBucketBrute (for GCP Bucket Enumeration)
 RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBucketBrute
 
-# Install AlterX (for Alteration Detection)
+# -----------------------------
+# Miscellaneous Tools
+# -----------------------------
+
+# AlterX (for Alteration Detection)
 RUN go install -v github.com/projectdiscovery/alterx/cmd/alterx@latest
 
-# Install Subzy (for Subdomain Takeover Detection)
+# Subzy (for Subdomain Takeover Detection)
 RUN go install -v github.com/PentestPad/subzy@latest
 
-# Install CveMap (for CVE Detection)
+# CveMap (for CVE Detection)
 RUN go install -v github.com/projectdiscovery/cvemap/cmd/cvemap@latest
 
-# Install uncover (to quickly discover exposed hosts on the internet)
+# uncover (to quickly discover exposed hosts on the internet)
 RUN go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
 
-# Install PDTM (to install all project discovery tools)
+# PDTM (to install all project discovery tools)
 RUN go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
 
-# Install Wfuzz
-RUN pip3 install wfuzz
+# -----------------------------
+# Wordlists
+# -----------------------------
 
-# Install Ffuf
-RUN go install -v github.com/ffuf/ffuf/v2@latest
+# SecLists
+RUN git clone https://github.com/danielmiessler/SecLists.git /opt/SecLists
 
-# Instalar Flask y forzar la reinstalación de blinker
+# Commonspeak2-Wordlists
+RUN git clone https://github.com/assetnote/commonspeak2-wordlists.git /opt/commonspeak2-wordlists
+
+# BBH-Lists
+RUN git clone https://github.com/bonino97/BBH-Lists.git /opt/BBH-Lists
+
+# DirBuster Wordlists
+RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuster
+
+# -----------------------------
+# Additional Setup
+# -----------------------------
+
+# Install Flask and force reinstallation of blinker
 RUN pip3 install --ignore-installed blinker && pip3 install flask
 
 # Clean up
