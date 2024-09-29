@@ -327,7 +327,7 @@ RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBu
 RUN go install -v github.com/projectdiscovery/alterx/cmd/alterx@latest
 
 # Install Subzy (for Subdomain Takeover Detection)
-RUN go install -v github.com/lukasikic/subzy@latest
+RUN go install -v github.com/PentestPad/subzy@latest
 
 # Install CveMap (for CVE Detection)
 RUN go install -v github.com/projectdiscovery/cvemap/cmd/cvemap@latest
@@ -340,6 +340,9 @@ RUN go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
 
 # Install Wfuzz
 RUN pip3 install wfuzz
+
+# Install Ffuf
+RUN go install -v github.com/ffuf/ffuf/v2@latest
 
 # Instalar Flask y forzar la reinstalación de blinker
 RUN pip3 install --ignore-installed blinker && pip3 install flask
