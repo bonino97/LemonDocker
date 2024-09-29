@@ -84,13 +84,32 @@ def run_tool_task(self, tool, args, input_data=None):
             'stderr': stderr,
             'returncode': returncode
         }
+
+        # Si el comando falla (returncode distinto de 0), marcamos como fallido
+        if returncode != 0:
+            raise Exception(
+                f"Command {command} failed with return code {returncode}")
+
     except Exception as e:
         output = {'error': str(e)}
 
-    # Update progress
-    self.update_state(state='PROGRESS', meta={'current': self.request.chain.index(
-        self.request.id) + 1, 'total': len(self.request.chain)})
+        # Actualizar el estado del trabajo a 'failed' en caso de error
+        session = Session()
+        job = session.query(Job).get(self.request.id)
+        job.status = 'failed'
+        job.result = json.dumps(output)
+        session.commit()
+        session.close()
 
+        # Re-lanzar la excepción para que Celery registre el fallo
+        raise e
+
+    # Actualizar progreso si hay cadena (chain)
+    if self.request.chain:
+        self.update_state(state='PROGRESS', meta={'current': self.request.chain.index(
+            self.request.id) + 1, 'total': len(self.request.chain)})
+
+    # Actualizar el estado del trabajo a 'completed'
     session = Session()
     job = session.query(Job).get(self.request.id)
     job.status = 'completed'
@@ -105,27 +124,47 @@ def run_tool_task(self, tool, args, input_data=None):
 def run_pipeline_task(self, pipeline_name, target):
     pipeline = PIPELINES.get(pipeline_name)
     if not pipeline:
+        # Marcar el trabajo como 'failed' si el pipeline no se encuentra
+        session = Session()
+        job = session.query(Job).get(self.request.id)
+        job.status = 'failed'
+        job.result = json.dumps({'error': 'Pipeline not found'})
+        session.commit()
+        session.close()
         return {'error': 'Pipeline not found'}
 
-    # Create a chain of tasks
-    tasks = []
-    for step in pipeline:
-        tool = step["tool"]
-        args = step["args"] + [target]
-        tasks.append(run_tool_task.s(tool, args))
+    try:
+        # Create a chain of tasks
+        tasks = []
+        for step in pipeline:
+            tool = step["tool"]
+            args = step["args"] + [target]
+            tasks.append(run_tool_task.s(tool, args))
 
-    # Execute the chain of tasks
-    chain_result = chain(*tasks).apply_async()
+        # Execute the chain of tasks
+        chain_result = chain(*tasks).apply_async()
 
-    # Store the chain ID for tracking
-    session = Session()
-    new_job = Job(id=chain_result.id, status="running",
-                  tool=pipeline_name, args=target)
-    session.add(new_job)
-    session.commit()
-    session.close()
+        # Store the chain ID for tracking
+        session = Session()
+        new_job = Job(id=chain_result.id, status="running",
+                      tool=pipeline_name, args=target)
+        session.add(new_job)
+        session.commit()
+        session.close()
 
-    return {'chain_id': chain_result.id}
+        return {'chain_id': chain_result.id}
+
+    except Exception as e:
+        # Actualizar el estado del pipeline como 'failed' si hay algún error
+        session = Session()
+        job = session.query(Job).get(self.request.id)
+        job.status = 'failed'
+        job.result = json.dumps({'error': str(e)})
+        session.commit()
+        session.close()
+
+        # Re-lanzar la excepción para que Celery también registre el fallo
+        raise e
 
 
 @api.route('/run')
