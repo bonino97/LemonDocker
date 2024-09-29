@@ -41,6 +41,7 @@ RUN apt-get update && \
         libpq-dev \
         libpcap0.8-dev \
         libgmp-dev \
+        libyaml-dev \
         gcc \
         make \
         cmake \
