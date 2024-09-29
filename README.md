@@ -6,22 +6,25 @@
 
 LemonBooster is an automated platform that integrates multiple security tools for enumeration, discovery, and vulnerability scanning. This README provides detailed instructions to install and run LemonBooster on a Digital Ocean Droplet.
 
+---
+
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
 2. [Installation](#installation)
    - [Quick Installation using build.sh](#quick-installation-using-buildsh)
    - [Manual Installation](#manual-installation)
-3. [Using the API](#using-the-api)
+3. [Included Tools](#included-tools)
+4. [Using the API](#using-the-api)
    - [Example Requests](#example-requests)
-4. [Security Considerations](#security-considerations)
+5. [Security Considerations](#security-considerations)
    - [Implementing Authentication](#implementing-authentication)
    - [Configuring the Firewall](#configuring-the-firewall)
-5. [Additional Notes](#additional-notes)
-6. [Credits](#credits)
-7. [Troubleshooting](#troubleshooting)
-8. [Contact](#contact)
-9. [Conclusion](#conclusion)
+6. [Additional Notes](#additional-notes)
+7. [Credits](#credits)
+8. [Troubleshooting](#troubleshooting)
+9. [Contact](#contact)
+10. [Conclusion](#conclusion)
 
 ---
 
@@ -107,6 +110,18 @@ We have provided a `build.sh` script located within the `install` directory of t
 
 For users who prefer to install everything manually, follow these steps.
 
+**Repository Structure:**
+
+```
+LemonDocker/
+├── Dockerfile
+├── entrypoint.sh
+├── api/
+│   └── server.py
+├── install/
+    └── build.sh
+```
+
 #### **1. Connect to the Droplet**
 
 From your local terminal, connect to your Droplet using SSH:
@@ -181,6 +196,97 @@ You should see output similar to:
 CONTAINER ID   IMAGE          COMMAND             CREATED          STATUS          PORTS                    NAMES
 <CONTAINER_ID> lemonbooster   "/entrypoint.sh"    xx minutes ago   Up xx minutes   0.0.0.0:8000->8000/tcp   lemonbooster
 ```
+
+---
+
+## Included Tools
+
+LemonBooster includes a wide range of security tools categorized by their primary functions:
+
+### Subdomain Enumeration
+- [Amass](https://github.com/owasp-amass/amass)
+- [Subfinder](https://github.com/projectdiscovery/subfinder)
+- [ASNmap](https://github.com/projectdiscovery/asnmap)
+- [Assetfinder](https://github.com/tomnomnom/assetfinder)
+- [Chaos](https://github.com/projectdiscovery/chaos-client)
+- [Cero](https://github.com/glebarez/cero)
+- [Sublist3r](https://github.com/aboul3la/Sublist3r)
+- [KnockPy](https://github.com/guelfoweb/knock)
+- [Altdns](https://github.com/infosec-au/altdns)
+- [Findomain](https://github.com/Findomain/Findomain)
+- [GitHub Subdomains](https://github.com/gwen001/github-subdomains)
+
+### Active Subdomain Verification
+- [Httpx](https://github.com/projectdiscovery/httpx)
+- [Httprobe](https://github.com/tomnomnom/httprobe)
+- [Dnsx](https://github.com/projectdiscovery/dnsx)
+- [MassDNS](https://github.com/blechschmidt/massdns)
+- [Subrake](https://github.com/hash3liZer/Subrake)
+
+### Spidering and Crawling
+- [Gospider](https://github.com/jaeles-project/gospider)
+- [Hakrawler](https://github.com/hakluke/hakrawler)
+- [Katana](https://github.com/projectdiscovery/katana)
+
+### Port and Service Scanning
+- [Naabu](https://github.com/projectdiscovery/naabu)
+- [Tlsx](https://github.com/projectdiscovery/tlsx)
+- [Masscan](https://github.com/robertdavidgraham/masscan)
+- [Nmap](https://nmap.org/)
+
+### Technology Fingerprinting
+- [Webanalyze](https://github.com/rverton/webanalyze)
+- [WhatWeb](https://github.com/urbanadventurer/WhatWeb)
+
+### Automated Vulnerability Scanning
+- [Nuclei](https://github.com/projectdiscovery/nuclei)
+- [Interactsh client](https://github.com/projectdiscovery/interactsh)
+- [SQLMap](https://github.com/sqlmapproject/sqlmap)
+- [SSLyze](https://github.com/nabla-c0d3/sslyze)
+- [Nikto](https://github.com/sullo/nikto)
+
+### Screenshots
+- [GoWitness](https://github.com/sensepost/gowitness)
+- [EyeWitness](https://github.com/FortyNorthSecurity/EyeWitness)
+
+### Directory and File Brute Forcing
+- [GoBuster](https://github.com/OJ/gobuster)
+- [Dirsearch](https://github.com/maurosoria/dirsearch)
+- [Wfuzz](https://github.com/xmendez/wfuzz)
+- [Ffuf](https://github.com/ffuf/ffuf)
+
+### CMS Scanners
+- [WPScan](https://github.com/wpscanteam/wpscan)
+
+### JavaScript Analysis
+- [LinkFinder](https://github.com/GerbenJavado/LinkFinder)
+
+### OSINT Tools
+- [TheHarvester](https://github.com/laramies/theHarvester)
+
+### Git Tools
+- [shhgit](https://github.com/eth0izzle/shhgit)
+
+### Cloud Discovery Tools
+- [CloudEnum](https://github.com/initstring/cloud_enum)
+- [CloudList](https://github.com/projectdiscovery/cloudlist)
+- [S3Scanner](https://github.com/sa7mon/s3scanner)
+- [GCPBucketBrute](https://github.com/RhinoSecurityLabs/GCPBucketBrute)
+
+### Miscellaneous Tools
+- [AlterX](https://github.com/projectdiscovery/alterx)
+- [Subzy](https://github.com/PentestPad/subzy)
+- [CveMap](https://github.com/projectdis
+
+covery/cvemap)
+- [uncover](https://github.com/projectdiscovery/uncover)
+- [PDTM](https://github.com/projectdiscovery/pdtm)
+
+### Wordlists
+- [SecLists](https://github.com/danielmiessler/SecLists)
+- [Commonspeak2-Wordlists](https://github.com/assetnote/commonspeak2-wordlists)
+- [BBH-Lists](https://github.com/bonino97/BBH-Lists)
+- [DirBuster Wordlists](https://github.com/daviddias/node-dirbuster)
 
 ---
 
@@ -340,22 +446,7 @@ Replace `<YOUR_IP>` with the IP address from which you will access the API.
 
 ---
 
-## Contact
-
-If you have questions or need additional assistance, you can contact me at:
-
-- **Email**: [bonino1997@gmail.com](mailto:bonino1997@gmail.com)
-- **LinkedIn**: [linkedin.com/in/nicolás-bonino-892030188](https://www.linkedin.com/in/nicol%C3%A1s-bonino-892030188/)
-
----
-
 **Note**: Always respect applicable laws and regulations when performing security testing and vulnerability scans. Obtain proper authorization before scanning systems or networks that you do not own.
-
----
-
-## Conclusion
-
-With this detailed README, you should be able to install and run LemonBooster on your Digital Ocean Droplet and use the API to execute the included security tools. Be sure to follow the security considerations to protect your instance and the systems that interact with it.
 
 ---
 
@@ -398,131 +489,4 @@ echo "LemonBooster is now running on port 8000."
 - The `build.sh` script assumes that you are in the `install` directory, and the `Dockerfile` is in the parent directory.
 - It updates the system, installs Git and Docker, builds the Docker image, and runs the container.
 
-**Usage:**
-
-1. **SSH into the Droplet**
-
-   ```bash
-   ssh root@<DROPLET_IP>
-   ```
-
-2. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/bonino97/LemonDocker.git
-   ```
-
-3. **Navigate to the Install Directory**
-
-   ```bash
-   cd LemonDocker/install
-   ```
-
-4. **Give Execution Permissions to build.sh**
-
-   ```bash
-   chmod +x build.sh
-   ```
-
-5. **Run build.sh**
-
-   ```bash
-   ./build.sh
-   ```
-
-   This will set up everything automatically, leaving the Docker container running.
-
 ---
-
-### Maintaining the Manual Installation Instructions
-
-For users who prefer to install everything manually, the detailed manual installation steps are provided above in the [Manual Installation](#manual-installation) section.
-
----
-
-**Important Notes:**
-
-- Ensure that the `build.sh` script is placed inside the `install` directory of your repository.
-- The `entrypoint.sh` and `api/server.py` files should be correctly placed in the repository as per the Dockerfile instructions.
-- The `Dockerfile` should be present in the root of the repository.
-
-**Entry point script (`entrypoint.sh`):**
-
-```bash
-#!/bin/bash
-
-# Start the Flask API server
-python3 /opt/api/server.py
-```
-
-This file should be in the root directory of your repository.
-
-**API server (`api/server.py`):**
-
-```python
-from flask import Flask, request, jsonify
-import subprocess
-
-app = Flask(__name__)
-
-@app.route('/run', methods=['POST'])
-def run_tool():
-    data = request.get_json()
-    tool = data.get('tool')
-    args = data.get('args', [])
-
-    if not tool:
-        return jsonify({'error': 'No tool specified'}), 400
-
-    try:
-        command = [tool] + args
-        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        return jsonify({
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-            'returncode': result.returncode
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
-```
-
-This file should be located in the `api` directory within your repository.
-
-**Ensure all files are correctly placed and the paths in your Dockerfile match the locations of the files in your repository.**
-
----
-
-By following the instructions in the updated `README.md`, you should be able to install LemonBooster using the `build.sh` script located within the `install` directory, or manually, as per your preference.
-
-If you have any further questions or need additional assistance, feel free to reach out.
-
----
-
-# **End of README.md**
-
----
-
-**Additional Notes:**
-
-- Remember to push all the updated files to your repository, including `build.sh` in the `install` directory, `entrypoint.sh`, and `api/server.py`.
-- Make sure the `Dockerfile` is up to date and includes all the necessary instructions to install all the tools without missing any lines of code.
-- Ensure that the repository structure matches the paths used in the `Dockerfile` and `build.sh`.
-
-**Repository Structure:**
-
-```
-LemonDocker/
-├── Dockerfile
-├── entrypoint.sh
-├── api/
-│   └── server.py
-├── install/
-    └── build.sh
-```
-
----
-
-I hope this updated README meets your requirements and provides clear, step-by-step instructions for installing and running LemonBooster using the `build.sh` script within your repository. If you need further assistance or have additional questions, please let me know.
