@@ -363,6 +363,9 @@ EXPOSE 8000
 # Expose Redis port
 EXPOSE 6379
 
+# Expose Flower port
+EXPOSE 5555
+
 # Copy API files
 COPY api /opt/api
 
