@@ -314,17 +314,32 @@ RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuste
 RUN git clone https://github.com/initstring/cloud_enum.git /opt/cloud_enum && \
     pip3 install -r /opt/cloud_enum/requirements.txt
 
+# Install CloudList (for Cloud Discovery)
+RUN go install -v github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
+
 # Install S3Scanner (for AWS Bucket Enumeration)
 RUN go install -v github.com/sa7mon/s3scanner@latest
 
 # Install GCPBucketBrute (for GCP Bucket Enumeration)
 RUN git clone https://github.com/RhinoSecurityLabs/GCPBucketBrute.git /opt/GCPBucketBrute
 
+# Install AlterX (for Alteration Detection)
+RUN go install -v github.com/projectdiscovery/alterx/cmd/alterx@latest
+
+# Install Subzy (for Subdomain Takeover Detection)
+RUN go install -v github.com/lukasikic/subzy@latest
+
+# Install CveMap (for CVE Detection)
+RUN go install -v github.com/projectdiscovery/cvemap/cmd/cvemap@latest
+
+# Install uncover (to quickly discover exposed hosts on the internet)
+RUN go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
+
 # Install Wfuzz
 RUN pip3 install wfuzz
 
-# Install Flask (for the API)
-RUN pip3 install flask
+# Instalar Flask y forzar la reinstalación de blinker
+RUN pip3 install --ignore-installed blinker && pip3 install flask
 
 # Clean up
 RUN apt-get clean && \
