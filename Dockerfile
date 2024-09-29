@@ -52,6 +52,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create /opt/results directory and give root access
+RUN mkdir -p /opt/results && chown -R root:root /opt/results
+
 # Install Go (latest version)
 RUN wget https://golang.org/dl/go1.21.1.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz && \
