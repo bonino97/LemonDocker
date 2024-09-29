@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify  # type: ignore
 from flask_restx import Api, Resource, fields  # type: ignore
-from celery import Celery, chain  # type: ignore
-from sqlalchemy import create_engine, Column, Integer, String, Text  # type: ignore
+from celery import Celery, chain, AsyncResult  # type: ignore
+from sqlalchemy import create_engine, Column, String, Text  # type: ignore
 from sqlalchemy.ext.declarative import declarative_base  # type: ignore
 from sqlalchemy.orm import sessionmaker  # type: ignore
 import subprocess
@@ -226,10 +226,21 @@ class JobStatus(Resource):
         if not job:
             api.abort(404, "Job not found")
 
+        # Obtener el estado de la tarea de Celery usando AsyncResult
+        task_result = AsyncResult(job_id, app=celery)
+
+        # Detallar tanto el estado en Celery como el estado del job en la base de datos
         return {
-            'status': job.status,
+            'job_status': job.status,  # Estado del trabajo en la base de datos
+            'celery_status': task_result.state,  # Estado de la tarea en Celery
             'tool': job.tool,
-            'args': json.loads(job.args)
+            'args': json.loads(job.args),
+            # Devuelve el resultado si ya existe
+            'result': json.loads(job.result) if job.result else None,
+            'progress': {
+                'current': task_result.info.get('current', 0) if isinstance(task_result.info, dict) else 0,
+                'total': task_result.info.get('total', 1) if isinstance(task_result.info, dict) else 1
+            } if task_result.state == 'PROGRESS' else None  # Información de progreso
         }
 
 
@@ -242,14 +253,20 @@ class PipelineStatus(Resource):
         if result.state == 'PENDING':
             response = {
                 'state': result.state,
-                'status': 'Pipeline is pending execution'
+                'status': 'Pipeline is pending execution',
+                'progress': {
+                    'current': 0,
+                    'total': 1
+                }
             }
         elif result.state != 'FAILURE':
             response = {
                 'state': result.state,
-                'current': result.info.get('current', 0) if isinstance(result.info, dict) else 0,
-                'total': result.info.get('total', 1) if isinstance(result.info, dict) else 1,
-                'status': 'Pipeline is in progress' if result.state == 'PROGRESS' else 'Pipeline completed'
+                'status': 'Pipeline in progress' if result.state == 'PROGRESS' else 'Pipeline completed',
+                'progress': {
+                    'current': result.info.get('current', 0) if isinstance(result.info, dict) else 0,
+                    'total': result.info.get('total', 1) if isinstance(result.info, dict) else 1
+                }
             }
         else:
             response = {
@@ -276,7 +293,16 @@ class JobResult(Resource):
         if job.status != 'completed':
             api.abort(400, "Job not completed yet")
 
-        return json.loads(job.result)
+        # Agregar información adicional en la respuesta del resultado
+        task_result = AsyncResult(job_id, app=celery)
+        return {
+            'job_id': job_id,
+            'job_status': job.status,
+            'celery_status': task_result.state,
+            'tool': job.tool,
+            'args': json.loads(job.args),
+            'result': json.loads(job.result)
+        }
 
 
 @api.route('/pipeline_result/<string:chain_id>')
@@ -286,9 +312,16 @@ class PipelineResult(Resource):
     def get(self, chain_id):
         result = celery.AsyncResult(chain_id)
         if result.ready():
-            return result.get()
+            return {
+                'chain_id': chain_id,
+                'status': 'Pipeline completed',
+                'result': result.get()  # Devuelve el resultado de la cadena
+            }
         else:
-            api.abort(400, "Pipeline not completed yet")
+            return {
+                'chain_id': chain_id,
+                'status': 'Pipeline not completed yet'
+            }
 
 
 if __name__ == '__main__':

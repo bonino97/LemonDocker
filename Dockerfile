@@ -346,7 +346,7 @@ RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuste
 # Install additional dependencies for Celery, Redis, and SQLAlchemy
 RUN pip3 install --upgrade pip && \
     pip3 install --ignore-installed blinker && \
-    pip3 install flask celery redis sqlalchemy flask-restx
+    pip3 install flask celery redis sqlalchemy flask-restx flower
 
 # Clean up
 RUN apt-get clean && \
