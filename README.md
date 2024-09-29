@@ -104,6 +104,10 @@ We have provided a `build.sh` script located within the `install` directory of t
    <CONTAINER_ID> lemonbooster   "/entrypoint.sh"    xx minutes ago   Up xx minutes   0.0.0.0:8000->8000/tcp   lemonbooster
    ```
 
+   **Enter into the Docker image**
+   ```bash
+   docker exec -it lemonbooster /bin/bash
+   ```
 ---
 
 ### Manual Installation
