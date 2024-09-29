@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
-from celery import Celery
+from celery import Celery, chain
 from sqlalchemy import create_engine, Column, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -65,18 +65,31 @@ pipeline_model = api.model('Pipeline', {
 
 
 @celery.task(bind=True)
-def run_tool_task(self, tool, args):
+def run_tool_task(self, tool, args, input_data=None):
     try:
         command = [tool] + args
-        result = subprocess.run(
-            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if input_data:
+            # Pass input_data as input to the command
+            process = subprocess.Popen(
+                command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate(input=input_data)
+            returncode = process.returncode
+        else:
+            result = subprocess.run(
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr, returncode = result.stdout, result.stderr, result.returncode
+
         output = {
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-            'returncode': result.returncode
+            'stdout': stdout,
+            'stderr': stderr,
+            'returncode': returncode
         }
     except Exception as e:
         output = {'error': str(e)}
+
+    # Update progress
+    self.update_state(state='PROGRESS', meta={'current': self.request.chain.index(
+        self.request.id) + 1, 'total': len(self.request.chain)})
 
     session = Session()
     job = session.query(Job).get(self.request.id)
@@ -94,22 +107,25 @@ def run_pipeline_task(self, pipeline_name, target):
     if not pipeline:
         return {'error': 'Pipeline not found'}
 
-    results = []
+    # Create a chain of tasks
+    tasks = []
     for step in pipeline:
         tool = step["tool"]
         args = step["args"] + [target]
-        result = run_tool_task.delay(tool, args)
-        # This will wait for each task to complete
-        results.append(result.get())
+        tasks.append(run_tool_task.s(tool, args))
 
+    # Execute the chain of tasks
+    chain_result = chain(*tasks).apply_async()
+
+    # Store the chain ID for tracking
     session = Session()
-    job = session.query(Job).get(self.request.id)
-    job.status = 'completed'
-    job.result = json.dumps(results)
+    new_job = Job(id=chain_result.id, status="running",
+                  tool=pipeline_name, args=target)
+    session.add(new_job)
     session.commit()
     session.close()
 
-    return results
+    return {'chain_id': chain_result.id}
 
 
 @api.route('/run')
@@ -151,18 +167,11 @@ class RunPipeline(Resource):
         if not pipeline_name or not target:
             api.abort(400, "Pipeline name and target are required")
 
-        task = run_pipeline_task.delay(pipeline_name, target)
-
-        session = Session()
-        new_job = Job(id=task.id, status="running",
-                      tool=pipeline_name, args=target)
-        session.add(new_job)
-        session.commit()
-        session.close()
+        result = run_pipeline_task.delay(pipeline_name, target)
 
         return {
             'message': f'Running {pipeline_name} pipeline in background',
-            'job_id': task.id
+            'chain_id': result.get('chain_id')
         }, 202
 
 
@@ -185,6 +194,33 @@ class JobStatus(Resource):
         }
 
 
+@api.route('/pipeline_status/<string:chain_id>')
+class PipelineStatus(Resource):
+    @api.response(200, 'Pipeline status')
+    @api.response(404, 'Pipeline not found')
+    def get(self, chain_id):
+        result = celery.AsyncResult(chain_id)
+        if result.state == 'PENDING':
+            response = {
+                'state': result.state,
+                'status': 'Pipeline is pending execution'
+            }
+        elif result.state != 'FAILURE':
+            response = {
+                'state': result.state,
+                'current': result.info.get('current', 0) if isinstance(result.info, dict) else 0,
+                'total': result.info.get('total', 1) if isinstance(result.info, dict) else 1,
+                'status': 'Pipeline is in progress' if result.state == 'PROGRESS' else 'Pipeline completed'
+            }
+        else:
+            response = {
+                'state': result.state,
+                'status': 'Pipeline failed',
+                'error': str(result.info)
+            }
+        return response
+
+
 @api.route('/job_result/<string:job_id>')
 class JobResult(Resource):
     @api.response(200, 'Job result')
@@ -202,6 +238,18 @@ class JobResult(Resource):
             api.abort(400, "Job not completed yet")
 
         return json.loads(job.result)
+
+
+@api.route('/pipeline_result/<string:chain_id>')
+class PipelineResult(Resource):
+    @api.response(200, 'Pipeline result')
+    @api.response(404, 'Pipeline not found')
+    def get(self, chain_id):
+        result = celery.AsyncResult(chain_id)
+        if result.ready():
+            return result.get()
+        else:
+            api.abort(400, "Pipeline not completed yet")
 
 
 if __name__ == '__main__':
