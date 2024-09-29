@@ -42,6 +42,7 @@ RUN apt-get update && \
         libpcap0.8-dev \
         libgmp-dev \
         libyaml-dev \
+        libcurl4-openssl-dev \
         gcc \
         make \
         cmake \
