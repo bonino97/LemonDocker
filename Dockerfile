@@ -210,14 +210,6 @@ RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && 
     pip3 install -r /opt/LinkFinder/requirements.txt && \
     ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
 
-# CMS Scanners
-
-## CMSMap
-RUN git clone https://github.com/Dionach/CMSmap.git /opt/CMSmap && \
-    cd /opt/CMSmap && \
-    pip3 install -r requirements.txt && \
-    ln -s /opt/CMSmap/cmsmap.py /usr/local/bin/cmsmap
-
 # Scanners
 
 ## Tplmap
