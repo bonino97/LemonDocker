@@ -89,8 +89,8 @@ RUN apt-get update && apt-get install -y default-jdk
 # # Amass
 # RUN go install -v github.com/owasp-amass/amass/v3/...@latest
 
-# # Subfinder
-# RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+# Subfinder
+RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
 # # ASNmap
 # RUN go install -v github.com/projectdiscovery/asnmap/cmd/asnmap@latest
