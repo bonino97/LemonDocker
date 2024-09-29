@@ -363,12 +363,12 @@ EXPOSE 8000
 # Expose Redis port
 EXPOSE 6379
 
+# Copy API files
+COPY api /opt/api
+
 # Copy and set permissions for the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# Copy API files
-COPY api /opt/api
 
 # Default command
 CMD ["/entrypoint.sh"]
