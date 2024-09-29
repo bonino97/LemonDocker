@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
-from flask_restx import Api, Resource, fields
-from celery import Celery, chain
-from sqlalchemy import create_engine, Column, Integer, String, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from flask import Flask, request, jsonify  # type: ignore
+from flask_restx import Api, Resource, fields  # type: ignore
+from celery import Celery, chain  # type: ignore
+from sqlalchemy import create_engine, Column, Integer, String, Text  # type: ignore
+from sqlalchemy.ext.declarative import declarative_base  # type: ignore
+from sqlalchemy.orm import sessionmaker  # type: ignore
 import subprocess
 import uuid
 import json
@@ -64,7 +64,7 @@ pipeline_model = api.model('Pipeline', {
 })
 
 
-@celery.task(bind=True)
+@celery.task(bind=True, name='server.run_tool_task')
 def run_tool_task(self, tool, args, input_data=None):
     try:
         command = [tool] + args
@@ -101,7 +101,7 @@ def run_tool_task(self, tool, args, input_data=None):
     return output
 
 
-@celery.task(bind=True)
+@celery.task(bind=True, name='server.run_pipeline_task')
 def run_pipeline_task(self, pipeline_name, target):
     pipeline = PIPELINES.get(pipeline_name)
     if not pipeline:

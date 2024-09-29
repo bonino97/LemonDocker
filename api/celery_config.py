@@ -1,4 +1,4 @@
-from celery import Celery # type: ignore
+from celery import Celery  # type: ignore
 
 celery = Celery('tasks', broker='redis://localhost:6379/0',
                 backend='redis://localhost:6379/0')
@@ -10,3 +10,5 @@ celery.conf.update(
     timezone='UTC',
     enable_utc=True,
 )
+
+celery.autodiscover_tasks(['server'])
