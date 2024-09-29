@@ -149,6 +149,9 @@ RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@l
 ## GoWitness
 RUN go install -v github.com/sensepost/gowitness@latest
 
+## GitHub Subdomains
+RUN go install -v github.com/gwen001/github-subdomains@latest
+
 # Dirsearch (Python-based but added here for categorization)
 RUN git clone https://github.com/maurosoria/dirsearch.git /opt/dirsearch
 
@@ -194,13 +197,7 @@ RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
     pip3 install -r requirements.txt && \
     python3 setup.py install
 
-## GitHub Subdomains
-RUN git clone https://github.com/gwen001/github-subdomains.git /opt/github-subdomains && \
-    cd /opt/github-subdomains && \
-    pip3 install -r requirements.txt
-
 # Subdomain Scanners
-
 ## Subrake
 RUN git clone https://github.com/Hakin9/Subrake.git /opt/subrake && \
     cd /opt/subrake && \
