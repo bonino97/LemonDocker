@@ -47,6 +47,7 @@ RUN apt-get update && \
         make \
         cmake \
         perl \
+        redis-server \
         default-jdk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -339,18 +340,25 @@ RUN git clone https://github.com/daviddias/node-dirbuster.git /opt/node-dirbuste
 # Additional Setup
 # -----------------------------
 
-# Install Flask and force reinstallation of blinker
-RUN pip3 install --ignore-installed blinker && pip3 install flask
+# Install additional dependencies for Celery, Redis, and SQLAlchemy
+RUN pip3 install --upgrade pip && \
+    pip3 install --ignore-installed blinker && \
+    pip3 install flask celery redis sqlalchemy flask-restx
 
 # Clean up
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN pip3 cache purge
 
 # Set working directory
 WORKDIR /root/
 
 # Expose the API port
 EXPOSE 8000
+
+# Expose Redis port
+EXPOSE 6379
 
 # Copy and set permissions for the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
