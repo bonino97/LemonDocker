@@ -212,12 +212,6 @@ RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && 
 
 # Scanners
 
-## Tplmap
-RUN git clone https://github.com/epinna/tplmap.git /opt/tplmap && \
-    cd /opt/tplmap && \
-    pip3 install -r requirements.txt && \
-    ln -s /opt/tplmap/tplmap.py /usr/local/bin/tplmap
-
 ## SQLMap
 RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
     ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
@@ -237,6 +231,13 @@ RUN git clone https://github.com/FortyNorthSecurity/EyeWitness.git /opt/EyeWitne
 # JSON Manipulation
 
 ## JQ (already installed)
+
+# OSINT
+# TheHarvester
+RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && \
+    cd /opt/theHarvester && \
+    pip3 install -r requirements/base.txt && \
+    ln -s /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
 
 # -----------------------------
 # Install Perl-based tools
