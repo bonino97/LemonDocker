@@ -188,12 +188,6 @@ RUN git clone https://github.com/guelfoweb/knock.git /opt/knock && \
     cd /opt/knock && \
     python3 setup.py install
 
-## Subjack
-RUN git clone https://github.com/haccer/subjack.git /opt/subjack && \
-    cd /opt/subjack && \
-    go build && \
-    mv subjack /usr/local/bin/
-
 ## Altdns
 RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
     cd /opt/altdns && \
