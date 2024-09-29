@@ -199,17 +199,9 @@ RUN git clone https://github.com/infosec-au/altdns.git /opt/altdns && \
 
 # Subdomain Scanners
 ## Subrake
-RUN git clone https://github.com/Hakin9/Subrake.git /opt/subrake && \
+RUN git clone https://github.com/hash3liZer/Subrake.git /opt/subrake && \
     cd /opt/subrake && \
     pip3 install -r requirements.txt
-
-# Crawlers
-
-## Crawler
-RUN git clone https://github.com/ghostlulzhacks/crawler.git /opt/crawler
-
-## Wayback Machine Script
-RUN git clone https://github.com/ghostlulzhacks/waybackMachine.git /opt/waybackMachine
 
 # JavaScript Files
 
@@ -217,11 +209,6 @@ RUN git clone https://github.com/ghostlulzhacks/waybackMachine.git /opt/waybackM
 RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
     pip3 install -r /opt/LinkFinder/requirements.txt && \
     ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
-
-## JSSearch
-RUN git clone https://github.com/incogbyte/jsearch.git /opt/jsearch && \
-    cd /opt/jsearch && \
-    pip3 install -r requirements.txt
 
 # CMS Scanners
 
