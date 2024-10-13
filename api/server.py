@@ -67,16 +67,16 @@ pipeline_model = api.model('Pipeline', {
 @celery.task(bind=True, name='server.run_tool_task')
 def run_tool_task(self, tool, args, input_data=None):
     try:
-        command = [tool] + args
+        command = f"{tool} {' '.join(args)}"
         if input_data:
             # Pass input_data as input to the command
             process = subprocess.Popen(
-                command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
             stdout, stderr = process.communicate(input=input_data)
             returncode = process.returncode
         else:
             result = subprocess.run(
-                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
             stdout, stderr, returncode = result.stdout, result.stderr, result.returncode
 
         output = {
