@@ -11,10 +11,10 @@ celery.conf.update(
     enable_utc=True,
 )
 
-celery.autodiscover_tasks(['server'])
+# celery.autodiscover_tasks(['server'])
 
 # Incluye directamente el módulo 'server' en lugar de autodiscovery
 
-# celery.conf.update(
-#     include=['server']
-# )
+celery.conf.update(
+    include=['server']
+)
