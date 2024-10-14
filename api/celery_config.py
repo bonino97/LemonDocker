@@ -12,3 +12,9 @@ celery.conf.update(
 )
 
 celery.autodiscover_tasks(['server'])
+
+# Incluye directamente el módulo 'server' en lugar de autodiscovery
+
+# celery.conf.update(
+#     include=['server']
+# )

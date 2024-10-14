@@ -328,7 +328,7 @@ class PipelineResult(Resource):
 class GetFile(Resource):
     def get(self, file_path):
         # Verificar que el archivo solicitado esté dentro de /opt/results
-        full_path = os.path.join('/opt/results', file_path)
+        full_path = os.path.join('/results', file_path)
 
         # Verificar si el archivo existe
         if not os.path.exists(full_path):
