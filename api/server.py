@@ -323,11 +323,10 @@ class PipelineResult(Resource):
                 'status': 'Pipeline not completed yet'
             }
 
-
 @api.route('/get_file/<path:file_path>')
 class GetFile(Resource):
     def get(self, file_path):
-        # Verificar que el archivo solicitado esté dentro de /opt/results
+        # Verificar que el archivo solicitado esté dentro de /results
         full_path = os.path.join('/results', file_path)
 
         # Verificar si el archivo existe
@@ -339,7 +338,6 @@ class GetFile(Resource):
             return send_file(full_path)
         except Exception as e:
             abort(500, description=f"Error retrieving file: {str(e)}")
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
