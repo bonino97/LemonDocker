@@ -22,6 +22,6 @@ chmod +x entrypoint.sh
 docker build -t lemonbooster -f Dockerfile .
 
 # Run the Docker container
-docker run -d -p 8000:8000 -p 5555:5555 --name lemonbooster lemonbooster
+docker run -d -v $(pwd)/results:/opt/results -p 8000:8000 -p 5555:5555 --name lemonbooster lemonbooster
 
 echo "LemonBooster is now running on port 8000."

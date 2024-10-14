@@ -212,6 +212,9 @@ RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest && \
 # Interactsh client
 RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
 
+# Interactsh server
+RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@latest
+
 # SQLMap
 RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
     ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap

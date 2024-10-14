@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify  # type: ignore
+from flask import Flask, request, jsonify, send_file, abort  # type: ignore
 from flask_restx import Api, Resource, fields  # type: ignore
 from celery import Celery, chain  # type: ignore
 from sqlalchemy import create_engine, Column, String, Text  # type: ignore
@@ -322,6 +322,23 @@ class PipelineResult(Resource):
                 'chain_id': chain_id,
                 'status': 'Pipeline not completed yet'
             }
+
+
+@api.route('/get_file/<path:file_path>')
+class GetFile(Resource):
+    def get(self, file_path):
+        # Verificar que el archivo solicitado esté dentro de /opt/results
+        full_path = os.path.join('/opt/results', file_path)
+
+        # Verificar si el archivo existe
+        if not os.path.exists(full_path):
+            abort(404, description="File not found")
+
+        try:
+            # Devolver el archivo solicitado
+            return send_file(full_path)
+        except Exception as e:
+            abort(500, description=f"Error retrieving file: {str(e)}")
 
 
 if __name__ == '__main__':
