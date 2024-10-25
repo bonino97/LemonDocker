@@ -60,6 +60,11 @@ RUN wget https://golang.org/dl/go1.21.1.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz && \
     rm go1.21.1.linux-amd64.tar.gz
 
+# Install Chrome (latest version)
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb
+RUN apt-get install -f
+
 # Set Go environment variables
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/go
