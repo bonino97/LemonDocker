@@ -160,7 +160,7 @@ RUN git clone https://github.com/hash3liZer/Subrake.git /opt/subrake && \
     pip3 install -r requirements.txt
 
 # -----------------------------
-# Spidering and Crawling
+# Spidering, Crawling & Archive Analysis
 # -----------------------------
 
 # Gospider
@@ -171,6 +171,15 @@ RUN go install -v github.com/hakluke/hakrawler@latest
 
 # Katana
 RUN go install -v github.com/projectdiscovery/katana/cmd/katana@latest
+
+# GAU (Get All URLs)
+RUN go install -v github.com/lc/gau/v2/cmd/gau@latest
+
+# Waybackurls
+RUN go install -v github.com/tomnomnom/waybackurls@latest
+
+# Waymore
+RUN pip install waymore
 
 # -----------------------------
 # Port and Service Scanning
@@ -224,6 +233,14 @@ RUN go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-server@l
 RUN git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git /opt/sqlmap && \
     ln -s /opt/sqlmap/sqlmap.py /usr/local/bin/sqlmap
 
+# Ghauri
+RUN git clone https://github.com/r0oth3x49/ghauri.git && \
+    cd ghauri && \
+    python3 -m pip install --upgrade -r requirements.txt && \
+    python3 setup.py install
+
+RUN cd ..
+
 # SSLyze
 RUN pip3 install sslyze
 
@@ -274,6 +291,9 @@ RUN gem install wpscan
 RUN git clone https://github.com/GerbenJavado/LinkFinder.git /opt/LinkFinder && \
     pip3 install -r /opt/LinkFinder/requirements.txt && \
     ln -s /opt/LinkFinder/linkfinder.py /usr/local/bin/linkfinder
+
+# JS Finder
+RUN go install -v github.com/kacakb/jsfinder@latest
 
 # -----------------------------
 # OSINT Tools
@@ -330,6 +350,19 @@ RUN go install -v github.com/projectdiscovery/uncover/cmd/uncover@latest
 
 # PDTM (to install all project discovery tools)
 RUN go install -v github.com/projectdiscovery/pdtm/cmd/pdtm@latest
+
+# Urless - This is a tool used to de-clutter a list of URL
+RUN pip install urless 
+
+# Anew - This is a tool used to filter out new lines from a list
+RUN go install -v github.com/tomnomnom/anew@latest
+
+# GF - This is a tool used to filter out new lines from a list
+RUN go install -v github.com/tomnomnom/gf@latest
+
+RUN git clone https://github.com/1ndianl33t/Gf-Patterns
+
+RUN mv Gf-Patterns/*.json ~/.gf
 
 # -----------------------------
 # Wordlists
