@@ -21,12 +21,37 @@ chmod +x entrypoint.sh
 # Build the Docker image
 docker build -t lemonbooster -f Dockerfile .
 
-# Run the Docker container with resource limits
+# Detect system resources
+TOTAL_CPUS=$(nproc)
+TOTAL_MEM_GB=$(free -g | awk '/^Mem:/{print $2}')
+
+# Calculate resource limits adaptively
+# Use 90% of available CPUs, but cap at available cores
+CPU_LIMIT=$(awk "BEGIN {printf \"%.2f\", $TOTAL_CPUS * 0.9}")
+# If only 1 CPU, use 0.9 to stay within limits
+if (( $(echo "$CPU_LIMIT > $TOTAL_CPUS" | bc -l) )); then
+  CPU_LIMIT=$TOTAL_CPUS
+fi
+
+# Use 75% of available memory, minimum 2GB
+MEM_LIMIT=$(awk "BEGIN {mem=$TOTAL_MEM_GB * 0.75; if(mem < 2) mem=2; printf \"%.0fg\", mem}")
+MEM_SWAP=$(awk "BEGIN {mem=$TOTAL_MEM_GB * 0.75 + 1; if(mem < 3) mem=3; printf \"%.0fg\", mem}")
+
+echo "Detected system resources:"
+echo "- CPUs: $TOTAL_CPUS"
+echo "- Memory: ${TOTAL_MEM_GB}GB"
+echo ""
+echo "Configuring container with:"
+echo "- CPU limit: $CPU_LIMIT cores"
+echo "- Memory limit: $MEM_LIMIT (+ swap: $MEM_SWAP)"
+echo ""
+
+# Run the Docker container with adaptive resource limits
 docker run -d \
   --name lemonbooster \
-  --memory="6g" \
-  --memory-swap="7g" \
-  --cpus=1.8 \
+  --memory="$MEM_LIMIT" \
+  --memory-swap="$MEM_SWAP" \
+  --cpus=$CPU_LIMIT \
   --cpu-shares=1024 \
   -v $(pwd)/results:/results \
   -p 8000:8000 \
@@ -35,7 +60,9 @@ docker run -d \
   --restart unless-stopped \
   lemonbooster
 
-echo "LemonBooster is now running on port 8000 with the following resource limits:"
-echo "- Memory: 6GB (+ 1GB swap)"
-echo "- CPU: 1.8 cores"
+echo ""
+echo "✅ LemonBooster is now running on port 8000 with the following resource limits:"
+echo "- Memory: $MEM_LIMIT (+ $(echo $MEM_SWAP | sed 's/g//') swap)"
+echo "- CPU: $CPU_LIMIT cores"
+echo ""
 echo "Monitor the resource usage with: docker stats lemonbooster"

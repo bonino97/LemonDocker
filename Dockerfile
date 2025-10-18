@@ -360,9 +360,9 @@ RUN go install -v github.com/tomnomnom/anew@latest
 # GF - This is a tool used to filter out new lines from a list
 RUN go install -v github.com/tomnomnom/gf@latest
 
-RUN git clone https://github.com/1ndianl33t/Gf-Patterns
-
-RUN mv Gf-Patterns/*.json ~/.gf
+RUN git clone https://github.com/1ndianl33t/Gf-Patterns && \
+    mkdir -p ~/.gf && \
+    mv Gf-Patterns/*.json ~/.gf
 
 # -----------------------------
 # Wordlists
