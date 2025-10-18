@@ -300,10 +300,10 @@ RUN go install -v github.com/kacakb/jsfinder@latest
 # -----------------------------
 
 # TheHarvester
-RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && \
-    cd /opt/theHarvester && \
-    pip3 install -r requirements/base.txt && \
-    ln -s /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
+# RUN git clone https://github.com/laramies/theHarvester.git /opt/theHarvester && \
+#     cd /opt/theHarvester && \
+#     pip3 install -r requirements.txt && \
+#     ln -s /opt/theHarvester/theHarvester.py /usr/local/bin/theHarvester
 
 # -----------------------------
 # Git Tools
