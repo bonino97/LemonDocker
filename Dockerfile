@@ -410,9 +410,16 @@ EXPOSE 5555
 # Copy API files
 COPY api /opt/api
 
-# Copy and set permissions for the entrypoint script
+# Copy utility scripts
+COPY init_db.sh /opt/init_db.sh
+COPY manage.sh /opt/manage.sh
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+
+# Set permissions for scripts
+RUN chmod +x /entrypoint.sh /opt/init_db.sh /opt/manage.sh
+
+# Create symlink for easy access to manage script
+RUN ln -s /opt/manage.sh /usr/local/bin/lemondocker
 
 # Default command
 CMD ["/entrypoint.sh"]
